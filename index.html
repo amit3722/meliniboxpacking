@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Box Distribution + Order Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-glow bg-glow-left" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-right" aria-hidden="true"></div>
+
+  <main class="shell">
+    <header class="hero">
+      <p class="kicker">Operations Console</p>
+      <h1>Box Distribution and Order Form</h1>
+      <p class="subtitle">Dono modules alag hain. Tab switch se independent workflow use karo.</p>
+    </header>
+
+    <nav class="tabs" aria-label="Tool sections">
+      <button class="tab-btn active" data-tab="distribution">Box Distribution</button>
+      <button class="tab-btn" data-tab="order">Order Form</button>
+    </nav>
+
+    <section id="distributionTab" class="workspace distribution-workspace">
+      <div class="panel compact-form-panel">
+        <p class="kicker">Module 1</p>
+        <h2>Box Distribution</h2>
+
+        <div id="distributionInfoBlock" class="form-block">
+          <h3>Form 1: Box Header</h3>
+          <form id="distributionInfoForm" class="grid">
+            <label>
+              DATE
+              <input id="distDate" type="date" required />
+            </label>
+
+            <label>
+              ITEM No.
+              <input id="itemNo" type="text" placeholder="e.g. ITM-101" required />
+            </label>
+
+            <label>
+              BATCH
+              <input id="batchNo" type="text" placeholder="e.g. B-24-02A" required />
+            </label>
+
+            <label>
+              PACKER
+              <input id="packerName" type="text" placeholder="e.g. Packer-01" required />
+            </label>
+
+            <button type="submit">Next</button>
+          </form>
+          <p id="distributionStepError" class="inline-error is-hidden">Please complete all Form 1 fields, then click Next.</p>
+        </div>
+
+        <div id="distributionCalcBlock" class="form-block is-hidden">
+          <h3>Form 2: Distribution Calculator</h3>
+          <form id="distributionForm" class="grid">
+            <fieldset class="radio-group">
+              <legend>Balance pcs</legend>
+              <label class="radio-inline">
+                <input type="radio" name="balancePcsMode" value="yes" checked />
+                YES
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="balancePcsMode" value="not" />
+                NOT
+              </label>
+            </fieldset>
+
+            <div class="create-color-row">
+              <label>
+                Total No. Of Color
+                <input id="distTotalColors" type="number" min="1" max="10" step="1" inputmode="numeric" required />
+              </label>
+              <button type="button" id="createColorFieldsBtn">Create Fields</button>
+            </div>
+
+            <label>
+              Size
+              <input id="distSize" type="text" list="sizeOptions" placeholder="Select or type size" required />
+            </label>
+            <datalist id="sizeOptions">
+              <option value="XS"></option>
+              <option value="S"></option>
+              <option value="M"></option>
+              <option value="L"></option>
+              <option value="XL"></option>
+              <option value="2XL"></option>
+              <option value="3XL"></option>
+              <option value="4XL"></option>
+              <option value="5XL"></option>
+              <option value="6XL"></option>
+              <option value="7XL"></option>
+            </datalist>
+
+            <div id="colorFieldsWrap" class="color-fields-wrap">
+              <p class="mini-help">Color and Qty fields will generate based on Total No. Of Color.</p>
+            </div>
+
+            <div class="two-col-row">
+              <label>
+                Min. Color/Box
+                <input id="distMinColorInBox" type="number" min="1" step="1" inputmode="numeric" required />
+              </label>
+
+              <label>
+                Max. Pcs/Color
+                <input id="distMaxPcsOfColor" type="number" min="1" step="1" inputmode="numeric" required />
+              </label>
+            </div>
+
+            <div class="two-col-row">
+              <label>
+                Min Pcs
+                <input id="distMinPcs" type="number" min="1" step="1" inputmode="numeric" required />
+              </label>
+
+              <label>
+                Max Pcs
+                <input id="distMaxPcs" type="number" min="1" step="1" inputmode="numeric" required />
+              </label>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit">Calculate</button>
+              <button type="button" id="distributionClearBtn" class="btn-secondary">Clear All</button>
+            </div>
+          </form>
+          <p id="distributionCalcError" class="inline-error is-hidden">Please complete Form 2 with valid values.</p>
+        </div>
+      </div>
+
+      <div class="panel distribution-output-wrap">
+        <div class="a4-sheet">
+          <div class="page-no">Page 1</div>
+          <p class="kicker">Result</p>
+          <h2>Distribution Summary</h2>
+
+          <div class="a4-top">
+            <div class="header-output top-box">
+              <p class="mini-label">HEADER OUTPUT (NEXT KE BAAD)</p>
+              <div id="distHeaderRow" class="header-output-block is-hidden">
+                <p><span class="header-key">DATE</span><span class="header-sep">:</span> <strong id="metaDistDate">-</strong></p>
+                <p><span class="header-key">ITEM NO.</span><span class="header-sep">:</span> <strong id="metaItemNo">-</strong></p>
+                <p><span class="header-key">BATCH NO.</span><span class="header-sep">:</span> <strong id="metaBatchNo">-</strong></p>
+                <p><span class="header-key">PACKER</span><span class="header-sep">:</span> <strong id="metaPackerName">-</strong></p>
+              </div>
+            </div>
+
+            <aside class="qty-column top-box">
+              <p class="mini-label">RIGHT TOP QUANTITIES</p>
+              <table class="qty-table">
+                <tbody>
+                  <tr>
+                    <td>CUTTING QUANTITY</td>
+                    <td class="qty-cell"></td>
+                  </tr>
+                  <tr>
+                    <td>RECEIVING QUANTITY</td>
+                    <td id="qtyReceivedValue" class="qty-cell">0</td>
+                  </tr>
+                  <tr>
+                    <td>LOOSE QUANTITY</td>
+                    <td id="qtyLooseValue" class="qty-cell">0</td>
+                  </tr>
+                  <tr>
+                    <td>LOT QUANTITY</td>
+                    <td class="qty-cell"></td>
+                  </tr>
+                  <tr>
+                    <td>DEAD QUANTITY</td>
+                    <td class="qty-cell"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </aside>
+          </div>
+
+          <div class="metric-row">
+            <article class="metric">
+              <span>Total Box Qty</span>
+              <strong id="metricTotalColors">0</strong>
+            </article>
+            <article class="metric">
+              <span>Total pcs</span>
+              <strong id="metricTotalQty">0</strong>
+            </article>
+            <article class="metric">
+              <span>Total Loose</span>
+              <strong id="metricSize">0</strong>
+            </article>
+          </div>
+
+          <div id="distributionTablesContainer" class="distribution-tables"></div>
+
+          <div class="output-actions no-print">
+            <button type="button" id="saveOutputBtn">Save</button>
+            <select id="exportFormat">
+              <option value="excel">EXCEL</option>
+              <option value="pdf">PDF</option>
+            </select>
+            <button type="button" id="exportOutputBtn" class="btn-secondary">Export</button>
+            <button type="button" id="printOutputBtn" class="btn-secondary">Print</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="orderTab" class="workspace is-hidden">
+      <div class="panel">
+        <p class="kicker">Module 2</p>
+        <h2>Order Form</h2>
+
+        <form id="orderForm" class="grid">
+          <label>
+            Customer Name
+            <input id="customerName" type="text" placeholder="e.g. Ravi Traders" required />
+          </label>
+
+          <label>
+            Product
+            <input id="productName" type="text" placeholder="e.g. 500ml Juice Pack" required />
+          </label>
+
+          <label>
+            Order Units
+            <input id="orderUnits" type="number" min="0" step="1" value="240" required />
+          </label>
+
+          <label>
+            Unit Price
+            <input id="unitPrice" type="number" min="0" step="0.01" placeholder="e.g. 19.50" />
+          </label>
+
+          <label>
+            Delivery Notes
+            <input id="deliveryNotes" type="text" placeholder="e.g. Dispatch before 5 PM" />
+          </label>
+
+          <button type="submit">Update Order Preview</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <p class="kicker">Preview</p>
+        <h2>Order Snapshot</h2>
+
+        <div class="meta">
+          <p><span>Customer:</span> <strong id="metaCustomer">-</strong></p>
+          <p><span>Product:</span> <strong id="metaProduct">-</strong></p>
+          <p><span>Order Units:</span> <strong id="metaUnits">0</strong></p>
+          <p><span>Unit Price:</span> <strong id="metaPrice">-</strong></p>
+          <p><span>Subtotal:</span> <strong id="metaSubtotal">-</strong></p>
+          <p><span>Notes:</span> <strong id="metaNotes">-</strong></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
